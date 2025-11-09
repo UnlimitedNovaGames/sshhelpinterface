@@ -18,6 +18,9 @@ app.use(bodyParser.json());
 
 // 🔑 Leer ruta de clave privada correctamente
 const privateKeyPath = path.join(__dirname, process.env.SSH_KEY);
+console.log(privateKeyPath);
+const privateKey = fs.readFileSync(privateKeyPath , "utf-8");
+console.log(privateKey);
 
 // 🚀 Conexión SSH al iniciar
 (async () => {
@@ -25,7 +28,7 @@ const privateKeyPath = path.join(__dirname, process.env.SSH_KEY);
     await ssh.connect({
       host: process.env.SSH_HOST,
       username: process.env.SSH_USER,
-      privateKey: fs.readFileSync(privateKeyPath)
+      privateKey: privateKey
     });
     console.log("✅ Conectado al servidor SSH");
   } catch (err) {
