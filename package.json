@@ -1,0 +1,25 @@
+{
+  "name": "ssh-help-interface",
+  "version": "1.0.0",
+  "description": "Servidor Node.js que gestiona cuentas SSH con límites de tiempo y tráfico",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-ssh": "^13.1.0",
+    "mongoose": "^8.4.1",
+    "dotenv": "^16.4.5",
+    "moment": "^2.30.1",
+    "cors": "^2.8.5",
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
