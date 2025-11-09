@@ -18,9 +18,7 @@ app.use(bodyParser.json());
 
 // 🔑 Leer ruta de clave privada correctamente
 const privateKeyPath = path.join(__dirname, process.env.SSH_KEY);
-console.log(privateKeyPath);
 const privateKey = fs.readFileSync(privateKeyPath , "utf-8");
-console.log(privateKey);
 
 // 🚀 Conexión SSH al iniciar
 (async () => {
@@ -40,10 +38,9 @@ console.log(privateKey);
 app.post("/create", async (req, res) => {
   const { username, password, days } = req.body;
   const expireDate = moment().add(days || 1, "days").format("YYYY-MM-DD");
-  
   try {
     const commands = [
-      `sudo useradd -m -e ${expireDate} ${username}`,
+      `sudo useradd -m -e ${expireDate} -s /usr/sbin/nologin ${username}`,
       `echo "${username}:${password}" | sudo chpasswd`
     ];
     
