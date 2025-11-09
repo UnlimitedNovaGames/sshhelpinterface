@@ -5,6 +5,7 @@ import moment from "moment";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
+import fs from "fs";
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ app.use(bodyParser.json());
     await ssh.connect({
       host: process.env.SSH_HOST,
       username: process.env.SSH_USER,
-      privateKey: process.env.SSH_KEY
+      privateKey: fs.readFileSync(process.env.SSH_KEY)
     });
     console.log("✅ Conectado al servidor SSH");
   } catch (err) {
