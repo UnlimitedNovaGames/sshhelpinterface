@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Servidor Node.js que gestiona cuentas SSH con límites de tiempo y tráfico",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
