@@ -21,7 +21,7 @@ app.use(bodyParser.json());
     await ssh.connect({
       host: process.env.SSH_HOST,
       username: process.env.SSH_USER,
-      privateKey: fs.readFileSync(process.env.SSH_KEY)
+      privateKey: fs.readFileSync(__dirname + "/" + process.env.SSH_KEY)
     });
     console.log("✅ Conectado al servidor SSH");
   } catch (err) {
