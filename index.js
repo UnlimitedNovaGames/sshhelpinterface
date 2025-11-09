@@ -1,11 +1,12 @@
-import express from "express";
-import { NodeSSH } from "node-ssh";
-import dotenv from "dotenv";
-import moment from "moment";
-import bodyParser from "body-parser";
-import cors from "cors";
-import { v4 as uuidv4 } from "uuid";
-import fs from "fs";
+const express = require("express");
+const { NodeSSH } = require("node-ssh");
+const dotenv = require("dotenv");
+const moment = require("moment");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 
@@ -15,13 +16,16 @@ const ssh = new NodeSSH();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Conectar por SSH al iniciar
+// 🔑 Leer ruta de clave privada correctamente
+const privateKeyPath = path.join(__dirname, process.env.SSH_KEY);
+
+// 🚀 Conexión SSH al iniciar
 (async () => {
   try {
     await ssh.connect({
       host: process.env.SSH_HOST,
       username: process.env.SSH_USER,
-      privateKey: fs.readFileSync(__dirname + "/" + process.env.SSH_KEY)
+      privateKey: fs.readFileSync(privateKeyPath)
     });
     console.log("✅ Conectado al servidor SSH");
   } catch (err) {
@@ -33,17 +37,17 @@ app.use(bodyParser.json());
 app.post("/create", async (req, res) => {
   const { username, password, days } = req.body;
   const expireDate = moment().add(days || 1, "days").format("YYYY-MM-DD");
-
+  
   try {
     const commands = [
       `sudo useradd -m -e ${expireDate} ${username}`,
       `echo "${username}:${password}" | sudo chpasswd`
     ];
-
+    
     for (const cmd of commands) {
       await ssh.execCommand(cmd);
     }
-
+    
     res.json({
       success: true,
       username,
@@ -77,6 +81,6 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// 🚀 Iniciar servidor HTTP
+// 🟢 Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🟢 Servidor corriendo en puerto ${PORT}`));
